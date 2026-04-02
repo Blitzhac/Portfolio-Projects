@@ -1,0 +1,94 @@
+#############Phase 1 - Scope Lock (Day 1-2)
+
+Define objective: binary classification (Normal vs Pneumonia) and freeze scope to one dataset only.
+
+Lock success metrics: F1, Recall (Sensitivity), Precision, ROC-AUC, confusion matrix.
+
+Lock communication rule: educational/research project only, explicitly not for clinical diagnosis.
+
+Output: one-page project brief (goal, data, metrics, risks).
+
+############Phase 2 - Data and Experiment Design (Week 1)
+
+Select Kaggle chest X-ray dataset and document data provenance, class distribution, and known limitations.
+
+Predefine split policy: train/validation/test with stratification; patient-level split when metadata allows to prevent leakage.
+
+Predefine imbalance strategy: class weights or weighted sampling (pick one and keep it consistent).
+
+Output: experiment protocol document finalized before model training.
+
+#############Phase 3 - Baseline First (Week 2)
+
+Build baseline model track using a standard CNN transfer-learning setup (this is the benchmark anchor).
+
+Record full metric panel on validation set and capture training behavior notes (stability, overfitting signs).
+
+Output: baseline results table + confusion matrix + short observations.
+
+#############Phase 4 - ViT Improved Track (Week 3)
+
+Train ViT as the second model (not replacement for baseline), using same split and same evaluation protocol.
+
+Keep comparison fair: identical dataset, no test-set tuning, same reporting template.
+
+Document compute/training trade-offs (time, resource usage, augmentation sensitivity).
+
+Output: side-by-side baseline vs ViT comparison sheet.
+
+##############Phase 5 - Final Evaluation and Error Analysis (Week 4)
+
+Run one-time final test evaluation after model choices are fixed.
+
+Perform error analysis focused on false negatives, low-quality images, and class-confusion patterns.
+
+Write limitations section: dataset bias, domain shift risk, no external clinical validation.
+
+Output: final results report with decision rationale for best model.
+
+#############Phase 6 - Portfolio Packaging (Week 4-5, parallel after Phase 3 stabilizes)
+
+Prepare GitHub-ready narrative structure: problem, data, method, metrics, errors, limitations, reproducibility steps.
+
+Prepare Kaggle evidence: EDA + baseline/improved result story.
+
+Prepare Hugging Face publishing plan: model card with intended use, metrics, and safety limitations.
+
+Output: recruiter-facing artifact checklist completed.
+
+#############Phase 7 - Application Conversion (Week 5-6)
+
+Create resume bullet set from measured outcomes only (no inflated claims).
+
+Create LinkedIn summary with one insight from error analysis and one model-comparison insight.
+
+Define interview story: what failed first, what changed, and why final model was chosen.
+
+Output: job-application-ready talking points tied to your project evidence.
+
+Dependencies and Parallelism
+
+Phases 1-2 must complete before any model work.
+Phase 3 blocks Phase 4 (ViT requires baseline reference).
+Phase 5 depends on Phases 3-4 being frozen.
+Phase 6 can begin after Phase 3 and run parallel with Phase 4-5 documentation updates.
+Phase 7 depends on Phase 5 results being finalized.
+Verification
+
+Scope verification: confirm project remains binary classification with one dataset and no scope creep.
+Protocol verification: confirm leakage control, split strategy, and imbalance handling are written before training.
+Fair-comparison verification: confirm CNN baseline and ViT use identical split/evaluation criteria.
+Reporting verification: confirm final report includes non-accuracy metrics and error analysis.
+Safety verification: confirm all public text includes non-clinical-use disclaimer.
+Portfolio verification: confirm three visible artifacts exist in plan (Kaggle evidence, GitHub project narrative, Hugging Face model card/demo plan).
+Decisions
+
+Included: planning only; no coding.
+Included: Kaggle-first execution and Hugging Face publication strategy.
+Included: ViT as improved-model track after a CNN baseline.
+Excluded: multi-class disease detection, advanced ensembling, clinical-grade claims.
+Further Considerations
+
+Final model rule: pick the model with better Recall and F1 on test set unless compute cost is much higher for very small gains.
+If ViT gain is small, use CNN as your main final story and present ViT as a controlled comparison experiment.
+After this flagship project, add one non-medical analytics project to widen your Werkstudent role fit.
