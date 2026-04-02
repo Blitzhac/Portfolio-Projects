@@ -1,0 +1,59 @@
+# 🐧 Penguin Species Clustering — Antarctica
+
+An unsupervised machine learning project that clusters Antarctic penguin species using the Palmer Penguins dataset — without ever telling the model what the species are.
+
+---
+
+## 📁 Dataset
+**Palmer Penguins** — 344 penguins across 3 species (Adelie, Chinstrap, Gentoo) from 3 islands in Antarctica. Features used: bill length, bill depth, flipper length and body mass.
+
+---
+
+## 🔢 Steps
+
+### Step 1 — Project Setup
+Set up a virtual environment and installed required libraries: `pandas`, `numpy`, `matplotlib`, `seaborn`, `scikit-learn` and `scipy`. Keeping dependencies isolated ensures the project is reproducible on any machine.
+
+### Step 2 — Load & Explore the Data
+Loaded the dataset directly from a URL using pandas and explored its shape, column types, missing values and species distribution. This step builds familiarity with the data before touching any model.
+
+### Step 3 — Visualise the Features
+Created a pairplot coloured by species and a correlation heatmap. This revealed that flipper length strongly separates Gentoo from the other two species, while bill dimensions help distinguish Adelie from Chinstrap.
+
+### Step 4 — Preprocessing
+Handled missing values using `SimpleImputer` (mean strategy) and standardised all features using `StandardScaler`. Scaling is critical for KMeans because it calculates distances — unscaled features with larger values would unfairly dominate the results.
+
+### Step 5 — Find the Optimal Number of Clusters
+Used the **Elbow Method** (inertia vs k) and **Silhouette Score** (cluster quality vs k) across k=2 to 8. Both methods confirmed **k=3** as the optimal number of clusters, matching the 3 real species.
+
+### Step 6 — KMeans Clustering
+Fitted a KMeans model with k=3, `random_state=42` and `n_init=10`. Assigned every penguin to a cluster and analysed cluster profiles by computing mean feature values per cluster. Cluster 1 had the highest flipper length, identifying it as Gentoo.
+
+### Step 7 — PCA Visualisation
+Used Principal Component Analysis (PCA) to compress 4 features into 2 dimensions (retaining 88% of variance) and plotted the clusters. Comparing the cluster plot against the true species plot showed strong visual agreement, confirming the model had discovered meaningful structure.
+
+### Step 8 — Hierarchical Clustering
+Built a dendrogram using Ward linkage on a random sample of 80 points. The dendrogram showed a clear gap confirming k=3. Also fitted `AgglomerativeClustering` as an alternative to KMeans. Hierarchical clustering is useful for visually exploring structure without specifying k upfront.
+
+### Step 9 — Evaluation
+Evaluated the final model using two metrics:
+- **Silhouette Score: 0.448** — moderate, reflecting the natural overlap between Adelie and Chinstrap in feature space
+- **Adjusted Rand Index: 0.78** — strong, meaning the model correctly grouped 78% of penguin pairs compared to true species labels without ever seeing them
+
+---
+
+## 📊 Results
+The model successfully discovered all 3 penguin species through unsupervised learning alone. Gentoo was cleanly separated due to its distinct size. Adelie and Chinstrap were mostly separated correctly, with some overlap at their boundary — consistent with their biological similarity.
+
+---
+
+## 🛠 Libraries Used
+`pandas` · `numpy` · `matplotlib` · `seaborn` · `scikit-learn` · `scipy`
+
+---
+
+## 🚀 Potential Extensions
+- Try DBSCAN — does not require k to be specified upfront
+- Replace PCA with t-SNE for richer 2D visualisation
+- Add island and sex as additional features
+- Build an interactive Streamlit dashboard
