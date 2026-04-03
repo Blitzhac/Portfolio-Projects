@@ -1,0 +1,19 @@
+# Data — never push raw images to GitHub
+data/
+*.png
+*.jpg
+*.jpeg
+
+# Model weights
+models/*.pth
+models/*.onnx
+models/*.pt
+
+# Python
+__pycache__/
+*.pyc
+.env
+.venv/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
