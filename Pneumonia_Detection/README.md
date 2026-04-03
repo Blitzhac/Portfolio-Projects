@@ -1,10 +1,4 @@
 # Pneumonia Detection from Chest X-Rays
-> Educational/research project. Not for clinical use.
-
-V2 Roadmap Based on the Initial Roadmap
-
-
-# Pneumonia Detection from Chest X-Rays
 
 > **Disclaimer:** This is an educational and research project only. It is explicitly **not intended for clinical diagnosis** or any medical decision-making.
 
@@ -12,7 +6,7 @@ V2 Roadmap Based on the Initial Roadmap
 
 ## Project Overview
 
-A deep learning pipeline for binary classification of chest X-ray images (Normal vs Pneumonia), built from scratch using PyTorch. The project compares a CNN-based baseline (EfficientNetV2-B3) against a Vision Transformer (ViT-B/16), with Grad-CAM explainability and a live Streamlit demo.
+A deep learning pipeline for binary classification of chest X-ray images (Normal vs Pneumonia), built from scratch using PyTorch. The project compares a CNN-based baseline (ConvNeXt-Base) against a Vision Transformer (ViT-B/16), with Grad-CAM explainability and a live Streamlit demo.
 
 **Team:**
 - Person 1 — Data pipeline, EDA, CNN baseline, evaluation
@@ -21,6 +15,19 @@ A deep learning pipeline for binary classification of chest X-ray images (Normal
 **Dataset:** [Chest X-Ray Images (Pneumonia) — Kaggle](https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia)
 
 **Success metrics:** F1 Score · Recall (Sensitivity) · Precision · ROC-AUC · Confusion Matrix
+
+---
+
+## Development Environment
+
+This project uses two environments depending on the task:
+
+| Environment | GPU | Used For |
+|---|---|---|
+| **Google Colab (free)** | T4 — 15GB VRAM | Phase 3 (CNN training), Phase 4 (ViT training), Phase 5 (Final evaluation) |
+| **Jupyter Notebook (local)** | Local CPU / 6GB GPU | Phase 1 (Project brief), Phase 2 (EDA), Phase 6 (Streamlit app) |
+
+> **Why Colab for training?** The free T4 GPU gives 15GB VRAM — enough to run ConvNeXt-Base and ViT-B/16 comfortably. Always save checkpoints to Google Drive during training so you don't lose progress if the session disconnects.
 
 ---
 
@@ -45,6 +52,7 @@ A deep learning pipeline for binary classification of chest X-ray images (Normal
 
 ### Phase 2 — Data Pipeline & EDA (Week 1)
 **Owner: Person 1 (Person 2 reviews + sets up experiment tracking)**
+**Environment: Jupyter Notebook (local)**
 
 **Concept — Why CLAHE?**
 Standard normalisation treats all pixels equally. CLAHE (Contrast Limited Adaptive Histogram Equalization) enhances local contrast in X-rays, making subtle opacities in lung tissue visible to the model. It is standard practice in medical imaging pipelines.
@@ -72,17 +80,18 @@ Standard normalisation treats all pixels equally. CLAHE (Contrast Limited Adapti
 
 ---
 
-### Phase 3 — CNN Baseline: EfficientNetV2-B3 (Week 2)
+### Phase 3 — CNN Baseline: ConvNeXt-Base (Week 2)
 **Owner: Person 1 (Person 2 implements Grad-CAM in parallel)**
+**Environment: Google Colab (T4 GPU)**
 
-**Concept — Why EfficientNetV2-B3?**
-EfficientNetV2-B3 is pretrained on ImageNet and achieves state-of-the-art accuracy on medical imaging benchmarks. It outperforms ResNet50 and trains 2–3× faster than EfficientNetB7, making it the best accuracy-to-compute tradeoff for this task. Training uses mixed precision (fp16) to leverage the NVIDIA GPU, and cosine annealing to stabilise the learning rate over time.
+**Concept — Why ConvNeXt-Base?**
+ConvNeXt (Meta AI, 2022) is a CNN redesigned using everything learned from Vision Transformers — modern layer normalisation, large kernels, depthwise convolutions, and inverted bottlenecks. ConvNeXt-Base achieves 85.8% on ImageNet and fits comfortably on Colab's T4 GPU (15GB VRAM). It is a stronger and more modern baseline than EfficientNetV2-B3, and makes the Phase 4 CNN vs ViT comparison more meaningful. Training uses cosine annealing LR scheduling and checkpoint saving to Google Drive to handle Colab session limits.
 
 **Person 1 tasks:**
-- Load EfficientNetV2-B3, freeze backbone, train classification head (5 epochs)
+- Mount Google Drive and set up checkpoint saving
+- Load ConvNeXt-Base via `timm`, freeze backbone, train classification head (5 epochs)
 - Unfreeze last 2 blocks and fine-tune (10–15 epochs)
 - Implement cosine annealing LR scheduler + early stopping
-- Enable mixed precision training (`torch.cuda.amp`)
 - Implement class-weighted loss to handle the ~1:3 class imbalance
 - Log all metrics to W&B / MLflow
 - Plot confusion matrix and full classification report
@@ -103,6 +112,7 @@ EfficientNetV2-B3 is pretrained on ImageNet and achieves state-of-the-art accura
 
 ### Phase 4 — ViT Improved Track: ViT-B/16 (Week 3)
 **Owner: Person 2 (Person 1 reviews for fair comparison)**
+**Environment: Google Colab (T4 GPU)**
 
 **Concept — Why ViT-B/16?**
 Vision Transformers use self-attention across image patches rather than local convolution filters. This allows the model to capture long-range dependencies across the full X-ray — for example, relating opacity patterns in the left lung to the right. We use ViT-B/16 pretrained on ImageNet-21k via HuggingFace Transformers, which provides stronger pretraining than standard ImageNet. The same dataset split, augmentations, and evaluation protocol from Phase 3 must be used to ensure a fair comparison.
@@ -130,6 +140,7 @@ Vision Transformers use self-attention across image patches rather than local co
 
 ### Phase 5 — Final Evaluation & Error Analysis (Week 4)
 **Owner: Both**
+**Environment: Google Colab (T4 GPU)**
 
 **Concept — Why Test-Time Augmentation (TTA)?**
 TTA runs inference multiple times on slightly different versions of each test image (flipped, rotated) and averages the predictions. This costs no additional training and typically adds 1–2% to test accuracy — a free boost for your final reported scores.
@@ -155,6 +166,7 @@ TTA runs inference multiple times on slightly different versions of each test im
 
 ### Phase 6 — Streamlit Demo & Portfolio Packaging (Week 4–5)
 **Owner: Person 2 (Streamlit app) + Person 1 (GitHub & Kaggle)**
+**Environment: Jupyter Notebook (local)**
 
 **Concept — Why a Streamlit demo?**
 A live demo where anyone can upload an X-ray and see the prediction alongside a Grad-CAM heatmap overlay is far more memorable to recruiters than a static notebook. It shows full-stack ML skills: model, inference pipeline, and deployment. Deployed for free on HuggingFace Spaces.
@@ -218,10 +230,13 @@ Phase 1 → Phase 2 → Phase 3 ────────────────
 |---|---|
 | Language | Python 3.10+ |
 | Deep learning | PyTorch + torchvision |
-| Transformers | HuggingFace `transformers` |
+| CNN baseline | ConvNeXt-Base (via `timm`) |
+| Transformers | HuggingFace `transformers` (ViT-B/16) |
 | Image processing | OpenCV, Pillow |
 | Experiment tracking | Weights & Biases or MLflow |
 | Explainability | Grad-CAM (pytorch-grad-cam) |
+| Training environment | Google Colab (T4 GPU — free) |
+| EDA environment | Jupyter Notebook (local) |
 | Demo app | Streamlit |
 | Deployment | HuggingFace Spaces |
 | Version control | Git + GitHub |
