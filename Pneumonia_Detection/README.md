@@ -12,7 +12,7 @@ A deep learning pipeline for binary classification of chest X-ray images (Normal
 - Person 1 — Data pipeline, EDA, CNN baseline, evaluation
 - Person 2 — ViT track, Grad-CAM, Streamlit app, portfolio
 
-**Dataset:** [Chest X-Ray Images (Pneumonia) — Kaggle](https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia)
+**Dataset:** [RSNA Pneumonia Detection Challenge — Kaggle](https://www.kaggle.com/competitions/rsna-pneumonia-detection-challenge)
 
 **Success metrics:** F1 Score · Recall (Sensitivity) · Precision · ROC-AUC · Confusion Matrix
 
@@ -39,7 +39,7 @@ This project uses two environments depending on the task:
 - Define objective: binary classification — Normal vs Pneumonia
 - Lock success metrics: F1, Recall, Precision, ROC-AUC, confusion matrix
 - Metric priority: Recall first (false negatives = missed pneumonia = dangerous)
-- Freeze scope to one dataset only — no multi-class disease detection
+- Freeze scope to one dataset only — RSNA Pneumonia Detection Challenge (radiologist-verified, 30,000 images)
 - Establish communication rule: educational/research project, not for clinical diagnosis
 - Set up shared GitHub repo with branch strategy (`p1/data-pipeline`, `p2/experiments`)
 
@@ -57,10 +57,15 @@ This project uses two environments depending on the task:
 **Concept — Why CLAHE?**
 Standard normalisation treats all pixels equally. CLAHE (Contrast Limited Adaptive Histogram Equalization) enhances local contrast in X-rays, making subtle opacities in lung tissue visible to the model. It is standard practice in medical imaging pipelines.
 
+**Note on the RSNA dataset structure:**
+The RSNA dataset includes bounding box annotations (designed for object detection), but we only need image-level labels for binary classification. The dataset provides a `stage_2_train_labels.csv` file — any image with at least one bounding box entry is labelled Pneumonia; images with no entry are Normal. This extraction step happens first, before any split or preprocessing.
+
 **Person 1 tasks:**
+- Download RSNA dataset via Kaggle CLI (`kaggle competitions download -c rsna-pneumonia-detection-challenge`)
+- Extract image-level labels from `stage_2_train_labels.csv` (Pneumonia vs Normal)
 - Explore dataset: class distribution, image sizes, pixel intensity stats
-- Write EDA notebook with sample images and observations
-- Rebuild train/val/test split (80/10/10, stratified) — the original `val/` folder has only 16 images and must be discarded
+- Write EDA notebook with sample images and class balance observations
+- Build train/val/test split (80/10/10, stratified) from scratch
 - Implement CLAHE preprocessing pipeline
 - Build PyTorch `Dataset` and `DataLoader` classes
 - Apply medical-safe augmentations: random horizontal flip, rotation ±15°, brightness/contrast jitter
@@ -211,7 +216,7 @@ Phase 1 → Phase 2 → Phase 3 ────────────────
 
 ## Verification Checklist
 
-- [ ] Scope confirmed: binary classification, one dataset, no scope creep
+- [ ] Scope confirmed: binary classification, RSNA dataset only, no scope creep
 - [ ] Experiment protocol written before any model training begins
 - [ ] CLAHE preprocessing applied consistently across all splits
 - [ ] No data leakage: train/val/test splits are non-overlapping
@@ -232,7 +237,7 @@ Phase 1 → Phase 2 → Phase 3 ────────────────
 | Deep learning | PyTorch + torchvision |
 | CNN baseline | ConvNeXt-Base (via `timm`) |
 | Transformers | HuggingFace `transformers` (ViT-B/16) |
-| Image processing | OpenCV, Pillow |
+| Image processing | OpenCV, Pillow, pydicom (RSNA uses DICOM format) |
 | Experiment tracking | Weights & Biases or MLflow |
 | Explainability | Grad-CAM (pytorch-grad-cam) |
 | Training environment | Google Colab (T4 GPU — free) |
@@ -240,6 +245,7 @@ Phase 1 → Phase 2 → Phase 3 ────────────────
 | Demo app | Streamlit |
 | Deployment | HuggingFace Spaces |
 | Version control | Git + GitHub |
+| Dataset | RSNA Pneumonia Detection Challenge (Kaggle) |
 
 ---
 
