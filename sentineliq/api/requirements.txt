@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pydantic
+numpy
+pandas
+scikit-learn
+imbalanced-learn
+sentence-transformers
+faiss-cpu
+anthropic

@@ -1,0 +1,28 @@
+# Step 1 -- start from an official Python base image
+# This gives us a clean Linux environment with Python 3.10 already installed
+# slim variant is smaller than the full image -- fewer unnecessary tools
+FROM python:3.10-slim
+
+# Step 2 -- set the working directory inside the container
+# All subsequent commands run from this path
+WORKDIR /app
+
+# Step 3 -- copy requirements file first
+# Docker caches this layer -- if requirements dont change
+# it skips reinstalling libraries on every rebuild
+COPY requirements.txt .
+
+# Step 4 -- install all Python dependencies
+# no-cache-dir keeps the image size smaller
+RUN pip install --no-cache-dir --timeout=300 -r requirements.txt
+
+# Step 5 -- copy the rest of the application files
+# This includes main.py, models folder, knowledge_base folder
+COPY . .
+
+# Step 6 -- expose port 8000 so outside world can reach the API
+EXPOSE 8000
+
+# Step 7 -- command to run when container starts
+# host 0.0.0.0 makes the server accessible outside the container
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

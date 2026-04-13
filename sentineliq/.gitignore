@@ -1,0 +1,94 @@
+# -------------------------------------------------------
+# SentinelIQ .gitignore
+# -------------------------------------------------------
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+env/
+.env/
+.venv/
+ENV/
+
+# Environment variables and secrets
+.env
+*.env
+secrets.py
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Data files -- too large for GitHub
+data/
+*.csv
+*.xlsx
+*.xls
+
+# Trained model files -- too large for GitHub
+api/models/*.pkl
+api/models/*.joblib
+
+# Knowledge base binary files -- regenerate locally
+api/knowledge_base/*.npy
+api/knowledge_base/*.bin
+
+# FAISS index
+*.bin
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# VS Code settings
+.vscode/
+*.code-workspace
+
+# PyCharm settings
+.idea/
+
+# Distribution and packaging
+dist/
+build/
+*.egg-info/
+*.egg
+MANIFEST
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+# pytest cache
+.pytest_cache/
+.cache/
+
+# mypy
+.mypy_cache/
+
+# Streamlit cache
+.streamlit/
+
+# Docker
+*.dockerignore
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*.swo
+~$*

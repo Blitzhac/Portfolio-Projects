@@ -1,0 +1,38 @@
+[
+  {
+    "topic": "region_Central",
+    "text": "Central is the weakest performing region with a margin of 7.92%, below the business average of 12.07%. Total Sales: 501239.89. Total Profit: 39706.36. Risk anomalies: 10. Opportunity anomalies: 11. Compared to the business average margin of 12.07%, this region is below average."
+  },
+  {
+    "topic": "region_East",
+    "text": "East is an average performing region with a margin of 13.48%. Total Sales: 678781.24. Total Profit: 91522.78. Risk anomalies: 12. Opportunity anomalies: 28. Compared to the business average margin of 12.07%, this region is above average."
+  },
+  {
+    "topic": "region_South",
+    "text": "South is an average performing region with a margin of 11.93%. Total Sales: 391721.9. Total Profit: 46749.43. Risk anomalies: 9. Opportunity anomalies: 12. Compared to the business average margin of 12.07%, this region is below average."
+  },
+  {
+    "topic": "region_West",
+    "text": "West is the best performing region with a margin of 14.94%. Total Sales: 725457.82. Total Profit: 108418.45. Risk anomalies: 1. Opportunity anomalies: 17. Compared to the business average margin of 12.07%, this region is above average."
+  },
+  {
+    "topic": "category_Furniture",
+    "text": "Furniture is the lowest margin category and a priority concern with a profit margin of 2.49%. Total Sales: 741999.8. Total Profit: 18451.27. Best category margin: 17.4%. Worst category margin: 2.49%."
+  },
+  {
+    "topic": "category_Office Supplies",
+    "text": "Office Supplies is a mid-range margin category with a profit margin of 17.04%. Total Sales: 719047.03. Total Profit: 122490.8. Best category margin: 17.4%. Worst category margin: 2.49%."
+  },
+  {
+    "topic": "category_Technology",
+    "text": "Technology is the highest margin category with a profit margin of 17.4%. Total Sales: 836154.03. Total Profit: 145454.95. Best category margin: 17.4%. Worst category margin: 2.49%."
+  },
+  {
+    "topic": "overall_summary",
+    "text": "Overall business performance from 2014 to 2017. Total transactions: 9994. Total sales: 2297200.86. Total profit: 286397.02. Overall profit margin: 12.47%. Total risk anomalies: 32. Total opportunity anomalies: 68. Best performing region: West at 14.94% margin. Worst performing region: Central at 7.92% margin. Most concerning category: Furniture."
+  },
+  {
+    "topic": "worst_transaction",
+    "text": "Most anomalous risk transaction detected on 2015-01-28 in South region, Furniture category. Sales: 4297.64. Discount: 0.4. Profit: -1862.31. Anomaly score: -0.0956."
+  }
+]
