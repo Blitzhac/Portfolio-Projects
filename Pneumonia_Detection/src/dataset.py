@@ -25,9 +25,26 @@ class RSNADataset(Dataset):
         self.images_dir = Path(images_dir)
         self.transform  = transform
 
-        # CLAHE instance — created once, reused for every image
-        # clipLimit=2.0 and tileGridSize=(8,8) are the medical imaging standards
-        self.clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+        # Keep only CLAHE params on the object. The actual OpenCV CLAHE object
+        # is created lazily per process because it is not picklable on Windows.
+        self._clahe_clip_limit = 2.0
+        self._clahe_tile_grid_size = (8, 8)
+        self._clahe = None
+
+    def _get_clahe(self):
+        """Create CLAHE lazily in each process to support DataLoader workers."""
+        if self._clahe is None:
+            self._clahe = cv2.createCLAHE(
+                clipLimit=self._clahe_clip_limit,
+                tileGridSize=self._clahe_tile_grid_size,
+            )
+        return self._clahe
+
+    def __getstate__(self):
+        """Drop non-picklable state when DataLoader spawns worker processes."""
+        state = self.__dict__.copy()
+        state["_clahe"] = None
+        return state
 
     def __len__(self):
         """Returns total number of images in this split."""
@@ -47,7 +64,7 @@ class RSNADataset(Dataset):
         pixels   = pydicom.dcmread(dcm_path).pixel_array   # shape: (H, W), uint8
 
         # ── 2. Apply CLAHE ─────────────────────────────────────────────────────
-        pixels = self.clahe.apply(pixels)                  # still (H, W), uint8
+        pixels = self._get_clahe().apply(pixels)           # still (H, W), uint8
 
         # ── 3. Resize to 224×224 ───────────────────────────────────────────────
         pixels = cv2.resize(pixels, (224, 224),
